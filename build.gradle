@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+version = '1.0'
+
+ext {
+    spring_version = '4.1.4.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile "org.springframework:spring-context:$spring_version"
+    compile "org.springframework:spring-web:$spring_version"
+    compile "org.springframework:spring-webmvc:$spring_version"
+
+    compile 'com.github.artyomcool:retrace:1.1.1'
+
+    compile 'org.slf4j:slf4j-api:1.7.7'
+
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.2'
+
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
