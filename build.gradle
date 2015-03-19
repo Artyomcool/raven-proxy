@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'war'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -22,6 +23,7 @@ dependencies {
     compile 'com.github.artyomcool:retrace:1.1.1'
 
     compile 'org.slf4j:slf4j-api:1.7.7'
+    runtime 'ch.qos.logback:logback-classic:1.1.2'
 
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.code.gson:gson:2.3.1'

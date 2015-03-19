@@ -6,6 +6,8 @@ import net.kencochrane.raven.Raven;
 import org.artyomcool.ravenproxy.data.FingerPrint;
 import org.artyomcool.ravenproxy.data.SentryEvent;
 import org.artyomcool.ravenproxy.data.SentryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/app/{app}/version/{version}")
 public class ProxyController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProxyController.class);
 
     @Autowired
     private StacktraceDecoder decoder;
@@ -63,7 +67,11 @@ public class ProxyController {
         FingerPrint fingerPrint = new FingerPrint(app, version);
         Raven raven = getRaven(fingerPrint);
 
-        addMeta(event, version, request.getRemoteAddr());
+        try {
+            addMeta(event, version, request.getRemoteAddr());
+        } catch (Exception ignored) {
+            logger.error("Can't add meta", ignored);
+        }
 
         raven.sendEvent(gson.toJson(event).getBytes(Charsets.UTF_8));
     }

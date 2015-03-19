@@ -129,6 +129,9 @@ public class HttpConnection extends AbstractConnection {
     }
 
     private String getErrorMessageFromStream(InputStream errorStream) {
+        if (errorStream == null) {
+            return "no content";
+        }
         BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream, Charsets.UTF_8));
         StringBuilder sb = new StringBuilder();
         try {

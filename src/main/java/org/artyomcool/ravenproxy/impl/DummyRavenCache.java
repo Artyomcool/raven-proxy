@@ -8,7 +8,7 @@ import org.artyomcool.ravenproxy.data.FingerPrint;
 
 public class DummyRavenCache implements RavenCache {
 
-    private Raven raven = DefaultRavenFactory.createRavenInstance(new Dsn("http://d60db8b4b22645ca8555232790d47146:83ca8e58f4604afcb1f15e77f3302b76@ec2-54-187-103-202.us-west-2.compute.amazonaws.com:9000/2"));
+    private Raven raven = DefaultRavenFactory.createRavenInstance(new Dsn("http://c33b082e2b2440ce81ce1e209182734b:b3f441bd8154427e857cda9abf183cb5@sentry.orange.icq.com/2"));
 
     @Override
     public Raven forFingerPrint(FingerPrint fingerPrint) {

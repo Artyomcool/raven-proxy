@@ -45,17 +45,20 @@ public class ProguardStacktraceDecoder implements StacktraceDecoder {
         }
         try {
             Retrace retrace = retraceCache.get(fingerPrint);
-            if (retrace == null) {
-                logger.info("no retrace found for {}", fingerPrint);
-                return stacktrace;
-            }
             StackTrace obfuscated = toStackTrace(retrace, stacktrace);
             StackTrace deobfuscated = retrace.stackTrace(obfuscated);
 
             return toSentryExceptions(deobfuscated);
         } catch (ExecutionException e) {
-            logger.error("can't decode stacktrace", e);
-            return stacktrace;
+            try {
+                throw e.getCause();
+            } catch (FileNotFoundException e1) {
+                logger.info("no retrace found for {}", fingerPrint);
+                return stacktrace;
+            } catch (Throwable t) {
+                logger.error("can't decode stacktrace", e);
+                return stacktrace;
+            }
         }
     }
 
