@@ -13,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +37,9 @@ public class ProxyController {
     @Autowired
     private RavenCache ravenCache;
 
+    @Autowired
+    private ServletContext context;
+
     private Gson gson = new Gson();
 
     @RequestMapping(value = "/crash", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -51,7 +56,11 @@ public class ProxyController {
         List<SentryException> exceptions = decoder.decode(fingerPrint, crash.getException());
         crash.setException(exceptions);
 
-        addMeta(crash, version, request.getRemoteAddr());
+        try {
+            addMeta(crash, version, request);
+        } catch (Exception ignored) {
+            logger.error("Can't add meta", ignored);
+        }
 
         raven.sendEvent(gson.toJson(crash).getBytes(Charsets.UTF_8));
     }
@@ -68,7 +77,7 @@ public class ProxyController {
         Raven raven = getRaven(fingerPrint);
 
         try {
-            addMeta(event, version, request.getRemoteAddr());
+            addMeta(event, version, request);
         } catch (Exception ignored) {
             logger.error("Can't add meta", ignored);
         }
@@ -109,6 +118,13 @@ public class ProxyController {
         }
     }
 
+    @RequestMapping(value="/version", method=RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public String version() throws IOException {
+        return "0.0.2";
+    }
+
     private Raven getRaven(FingerPrint fingerPrint) {
         Raven raven = ravenCache.forFingerPrint(fingerPrint);
         if (raven == null) {
@@ -117,7 +133,11 @@ public class ProxyController {
         return raven;
     }
 
-    private void addMeta(SentryEvent event, String version, String ipAddress) {
+    private void addMeta(SentryEvent event, String version, HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Real-IP");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
         event.getUser().setIpAddress(ipAddress);
         Map<String, String> tags = event.getTags();
         if (tags == null) {

@@ -113,6 +113,7 @@ public class ProguardStacktraceDecoder implements StacktraceDecoder {
                 packageName = className.substring(0, pos);
                 className = className.substring(pos + 1);
             }
+            exception.setValue(stacktrace.getMessage());
             exception.setType(className);
             exception.setModule(packageName);
             exception.setStackTrace(fromLines(stacktrace.getLines()));

@@ -1,9 +1,23 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:2.2.3'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'war'
 apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+if (file('distribution.gradle').exists()) {
+    apply from: 'distribution.gradle'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 version = '1.0'
 
 ext {
@@ -33,4 +47,9 @@ dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+gretty {
+    contextConfigFile = file('jetty-env.xml')
+    println file('jetty-env.xml').absoluteFile
 }
