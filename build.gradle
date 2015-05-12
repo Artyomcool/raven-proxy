@@ -51,5 +51,4 @@ dependencies {
 
 gretty {
     contextConfigFile = file('jetty-env.xml')
-    println file('jetty-env.xml').absoluteFile
 }
