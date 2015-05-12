@@ -40,6 +40,9 @@ public class ProxyController {
     @Autowired
     private ServletContext context;
 
+    @Autowired
+    private Configurator configurator;
+
     private Gson gson = new Gson();
 
     @RequestMapping(value = "/crash", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -92,7 +95,7 @@ public class ProxyController {
             @PathVariable("version") String version,
             HttpServletRequest request) throws IOException {
 
-        File tmpDir = new File("tmpDir");
+        File tmpDir = new File(configurator.getTmpDir());
         if (!tmpDir.exists() && !tmpDir.mkdirs()) {
             throw new IOException("Can't create tmp directory");
         }
@@ -102,7 +105,7 @@ public class ProxyController {
         FileCopyUtils.copy(request.getInputStream(), out);
         out.close();
 
-        File dest = new File(new FingerPrint(app, version).toFileName());
+        File dest = new File(new File(configurator.getMappingsDir()), new FingerPrint(app, version).toFileName());
         if (dest.exists()) {
             if (!dest.delete()) {
                 throw new IOException("Can't delete old mapping");

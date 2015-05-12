@@ -1,6 +1,6 @@
 package org.artyomcool.ravenproxy;
 
-import org.artyomcool.ravenproxy.impl.DummyRavenCache;
+import org.artyomcool.ravenproxy.impl.ConfigRavenCache;
 import org.artyomcool.ravenproxy.impl.ProguardStacktraceDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,7 +24,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Bean
     RavenCache ravenCache() {
-        return new DummyRavenCache();
+        return new ConfigRavenCache();
     }
 
     @Override

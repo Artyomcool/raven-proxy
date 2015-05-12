@@ -21,7 +21,7 @@ public class FingerPrint {
     }
 
     public String toFileName() {
-        return "mappings" + File.separator + app + File.separator + version;
+        return app + File.separator + version;
     }
 
     @Override
