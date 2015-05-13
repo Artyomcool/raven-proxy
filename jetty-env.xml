@@ -6,4 +6,8 @@
         <Arg>configPath</Arg>
         <Arg>test-config.properties</Arg>
     </Call>
+    <Call class="java.lang.System" name="setProperty">
+        <Arg>log4j.configuration</Arg>
+        <Arg>file:///home/artyomcool/dev/git/raven-proxy/log4j.properties</Arg>
+    </Call>
 </Configure>

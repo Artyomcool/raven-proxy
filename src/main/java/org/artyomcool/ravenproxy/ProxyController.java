@@ -13,13 +13,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +127,7 @@ public class ProxyController {
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String version() throws IOException {
-        return "0.0.2";
+        return "0.0.3";
     }
 
     private Raven getRaven(FingerPrint fingerPrint) {
