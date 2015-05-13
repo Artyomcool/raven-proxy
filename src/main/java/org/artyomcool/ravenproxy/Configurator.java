@@ -37,7 +37,7 @@ public class Configurator implements ApplicationListener<ContextRefreshedEvent> 
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        String path = (String)context.getAttribute(CONFIG_PATH);
+        String path = context.getInitParameter(CONFIG_PATH);
         configure(path);
     }
 
